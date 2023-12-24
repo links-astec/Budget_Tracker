@@ -1,0 +1,270 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update</title>
+        <link rel="stylesheet" href="{% static 'budget\style.css' %}">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0.5) 50%), url('{% static "budget/ee.jpg" %}');
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        h1 {
+            background-color: #ff7200;
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px 8px 8px 8px;
+            margin: 0;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            text-align: left;
+        }
+
+        input {
+            width: calc(100% - 12px);
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            background-color: #ff7200;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .date-picker {
+            position: relative;
+            display: inline-block;
+            text-align: left;
+        }
+
+        .calendar {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 1;
+            display: none;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            margin-top: 5px;
+        }
+
+        .calendar table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .calendar td {
+            padding: 5px;
+            text-align: center;
+        }
+
+        .calendar td:hover {
+            background-color: #eee;
+        }
+
+        .calendar td.selected {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .calendar td.today {
+            font-weight: bold;
+        }
+
+        .calendar th {
+            padding: 5px;
+            text-align: center;
+            font-weight: normal;
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .calendar .prev-month,
+        .calendar .next-month {
+            color: #aaa;
+        }
+
+        .calendar .prev-month:hover,
+        .calendar .next-month:hover {
+            color: #555;
+            cursor: pointer;
+        }
+    </style>
+
+    <script>
+        function createCalendar(date) {
+            var calendar = document.createElement('div');
+            calendar.className = 'calendar';
+
+            var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            var dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+            var year = date.getFullYear();
+            var month = date.getMonth();
+            var day = date.getDate();
+
+            var firstDayOfMonth = new Date(year, month, 1);
+            var lastDayOfMonth = new Date(year, month + 1, 0);
+            var firstDayOfWeek = firstDayOfMonth.getDay();
+
+            var table = document.createElement('table');
+
+            var headerRow = document.createElement('tr');
+
+            var prevMonthCell = document.createElement('th');
+            prevMonthCell.className = 'prev-month';
+            prevMonthCell.innerHTML = '<';
+            prevMonthCell.addEventListener('click', function () {
+                date.setMonth(date.getMonth() - 1);
+                calendar.parentNode.replaceChild(createCalendar(date), calendar);
+            });
+            headerRow.appendChild(prevMonthCell);
+
+            var monthCell = document.createElement('th');
+            monthCell.colSpan = 5;
+            monthCell.innerHTML = monthNames[month] + ' ' + year;
+            headerRow.appendChild(monthCell);
+
+            var nextMonthCell = document.createElement('th');
+            nextMonthCell.className = 'next-month';
+            nextMonthCell.innerHTML = '>';
+            nextMonthCell.addEventListener('click', function () {
+                date.setMonth(date.getMonth() + 1);
+                calendar.parentNode.replaceChild(createCalendar(date), calendar);
+            });
+            headerRow.appendChild(nextMonthCell);
+
+            table.appendChild(headerRow);
+
+            var daysRow = document.createElement('tr');
+
+            for (var i = 0; i < dayNames.length; i++) {
+                var dayCell = document.createElement('th');
+                dayCell.innerHTML = dayNames[i];
+                daysRow.appendChild(dayCell);
+            }
+
+            table.appendChild(daysRow);
+
+            var daysInMonth = lastDayOfMonth.getDate();
+
+            var row = document.createElement('tr');
+
+            for (var i = 0; i < firstDayOfWeek; i++) {
+                var cell = document.createElement('td');
+                cell.innerHTML = ' ';
+                cell.className = 'prev-month';
+                row.appendChild(cell);
+            }
+
+            for (var i = 1; i <= daysInMonth; i++) {
+                var cell = document.createElement('td');
+                cell.innerHTML = i;
+                if (i === day) {
+                    cell.className = 'selected';
+                }
+                if (year === new Date().getFullYear() && month === new Date().getMonth() && i === new Date().getDate()) {
+                    cell.className += ' today';
+                }
+                cell.addEventListener('click', function () {
+                    var selectedDate = new Date(year, month, this.innerHTML);
+                    document.getElementById('date-input').value = selectedDate.toISOString().substring(0, 10);
+                    calendar.parentNode.removeChild(calendar);
+                });
+                row.appendChild(cell);
+                if ((firstDayOfWeek + i - 1) % 7 === 6) {
+                    table.appendChild(row);
+                    row = document.createElement('tr');
+                }
+            }
+
+            for (var i = (firstDayOfWeek + daysInMonth) % 7; i < 6; i++) {
+                var cell = document.createElement('td');
+                cell.innerHTML = ' ';
+                cell.className = 'next-month';
+                row.appendChild(cell);
+            }
+
+            table.appendChild(row);
+
+            calendar.appendChild(table);
+
+            return calendar;
+        }
+
+        document.getElementById('date-input').addEventListener('focus', function () {
+            var date = new Date();
+            var calendar = createCalendar(date);
+            var input = document.getElementById('date-input');
+            input.parentNode.insertBefore(calendar, input.nextSibling);
+        });
+    </script>
+</head>
+<body>
+    <h1>Update {{ budget.title }} 💸</h1>
+    <form method="POST">
+        {% csrf_token %}
+        
+        <label for="title">Choose or enter a Title:</label>
+        <input type="text" id="title" list="options" name="title" value="{{ budget.title}}">
+        <datalist id="options">
+          <option value="personal">
+          <option value="family">
+          <option value="work">
+          <option value="miscellaneous">
+        </datalist>
+        
+        <label for="amount">Amount</label>
+        <input type="number" name="amount" id="amount" max="Infinity" min="0.00" value="{{budget.amount}}">
+
+        <label for="description">Description</label>
+        <input type="text" name="description" id="description" value="{{budget.description}}">
+
+        <label for="category">Category</label>
+        <input type="text" id="category" name="category" value="{{budget.category}}" list="options">
+        <datalist id="options" >
+            <option value="fees">
+            <option value="transport">
+            <option value="communication">
+        </datalist>
+
+        <label for="date_added">Date Added</label>
+        <div class="date-picker">
+            <input type="date" name="date_added" id="date-input" value="{{budget.date_added}}">
+            <div class="calendar"></div>
+        </div>
+
+        <label for="date_completed">Date for Completion</label>
+        <input type="date" name="date_completed" id="date_completed" value="date_completed">
+
+        <input type="submit" value="Update Budget 💸">
+    </form>
+</body>
+</html>

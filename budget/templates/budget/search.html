@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Details</title>
+    <link rel="stylesheet" href="{% static 'budget/style.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0.5) 50%), url('{% static "budget/ee.jpg" %}');
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8); /* Added background color with opacity */
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #ff7200;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            margin-bottom: 10px;
+            
+        }
+
+       b{
+        font-weight: bolder;
+       }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #ff7200;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .button:hover {
+            background-color: #3f1e02;
+        }
+    </style>
+</head>
+<body>
+    
+        {% for budget in budgets %}
+    <div class="container"> 
+        <h1>{{ budget.title }} Details</h1>
+        <p> <b>Category:</b> {{ budget.category }} </p>
+        <p> <b>Amount: </b> GHC:{{ budget.amount }} </p>
+        <p> <b>Added:</b> {{ budget.date_added }} </p>
+        <p><b>Description:</b> {{ budget.description }} </p>
+        <p><b>Completion Date:</b> {{ budget.date_completed }} </p>
+        <a class="button" href="{% url 'list' %}">Go Back</a>
+    </div>
+{% empty %}
+    <p>No budgets found.</p>
+{% endfor %}
+
+</body>
+</html>

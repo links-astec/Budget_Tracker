@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0.5) 50%), url('{% static "budget/ee.jpg" %}');
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        h1 {
+            background-color: #ff7200;
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px 8px 8px 8px;
+            margin: 0;
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        input[type="submit"], a {
+            display: inline-block;
+            width: 45%;
+            padding: 10px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        input[type="submit"] {
+            background-color: #ff7200;
+            width: 45%;
+        }
+
+        a {
+            background-color: #ff7200;
+            
+        }
+
+        input[type="submit"]:hover, a:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <h1>Delete Budget</h1>
+    <form method="POST">
+        {% csrf_token %}
+
+        <h2>Are you sure you want to delete {{ budget.title }}?</h2>  
+
+        <input type="submit" value="Yes, Delete it">
+        <a href="{% url 'list' %}">No, Cancel</a>
+    </form>
+</body>
+</html>

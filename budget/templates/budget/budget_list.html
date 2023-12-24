@@ -1,0 +1,165 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget List</title>
+    <link rel="stylesheet" href="{% static 'budget/style.css' %}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+    font-family: Arial, sans-serif;
+    background: url('{% static "budget/ee.jpg" %}') repeat-y center center fixed;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+}
+
+.main {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    min-height: 100vh;
+    position: relative;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0.5) 50%);
+}
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .logo {
+            color: #ff7200;
+            font-size: 30px;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .menu ul {
+            list-style: none;
+            display: flex;
+        }
+
+        .menu ul li {
+            margin-right: 20px;
+        }
+
+        .menu ul li a {
+            text-decoration: none;
+            color: #ff7200;
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: bold;
+            font-size: 16px;
+            transition: 0.4s ease-in-out;
+        }
+
+        .menu ul li a:hover {
+            color: #3f1e02;
+        }
+
+        .hey {
+            display: flex;
+            justify-content: space-evenly;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            gap: 20px;
+        }
+
+        .nono {
+    width: 300px;
+    background: url('{% static "budget/ee.jpg" %}') repeat-y center center fixed;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+        .nono:hover {
+            transform: scale(1.05);
+        }
+
+        .budgett {
+            margin-bottom: 10px;
+        }
+
+        .pp {
+            margin-bottom: 5px;
+            color: white;
+        }
+
+        .btnn {
+            width: 100%;
+            height: 30px;
+            background: #ff7200;
+            border: none;
+            margin-top: 10px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #fff;
+            transition: 0.4s ease;
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btnn:hover {
+            background: #fff;
+            color: #ff7200;
+        }
+
+        .btnn a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+        }
+        .mm{
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 1px 1px 1px 1px;
+        }
+        .mm:hover{
+            background: #fff;
+            color: #ff7200;
+            
+        }
+    </style>
+</head>
+<body>
+   <div class="main">
+       <header>
+        <h1 class="logo">CHECK OUT BUDGET💸</h1>
+        <div class="menu">
+         <ul>
+             <li><a href="{% url 'home' %}">Home</a></li>
+             <li><a href="{% url 'add' %}">Add Budgets</a></li>
+         </ul>
+        </div>
+       </header>
+        <div class="hey">
+            {% for budget in budget_data %}
+                <div class="nono">
+                    <div class="budgett">
+                        <a href="{% url 'detail' budget.id %}" class="mm">{{ budget.title }}</a>
+                        <p class="pp">🌐 {{ budget.category }}</p> 
+                        <p class="pp">💰 GHC: {{ budget.amount }}</p> 
+                        <p class="pp">📝 {{ budget.description }}</p> 
+                        <p class="pp">🔺 {{ budget.date_completed }}</p> 
+                        <p class="pp">🔻 {{ budget.date_added }}</p> 
+                    </div>
+                    <a href="{% url 'delete' budget.id %}" class="btnn">Delete</a>
+                    <a href="{% url 'update' budget.id %}" class="btnn">Update</a>
+                </div>
+            {% endfor %}
+        </div>
+   </div>
+</body>
+</html>
